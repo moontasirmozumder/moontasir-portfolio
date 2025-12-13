@@ -1,99 +1,86 @@
-/* =========================
-   BINARY RAIN (ADAPTIVE)
-========================= */
-const canvas = document.getElementById("binaryRain");
-const ctx = canvas.getContext("2d");
+/*********************************
+ * LIVE CAMERA SETUP
+ *********************************/
+const video = document.getElementById('camera');
 
-function resize() {
-  canvas.width = innerWidth;
-  canvas.height = innerHeight;
-}
-resize();
-addEventListener("resize", resize);
-
-const fontSize = 18;
-let columns = Math.floor(canvas.width / fontSize);
-let drops = Array(columns).fill(1);
-
-function css(v) {
-  return getComputedStyle(document.body).getPropertyValue(v);
+if (video) {
+  navigator.mediaDevices.getUserMedia({ video: true })
+    .then(stream => {
+      video.srcObject = stream;
+    })
+    .catch(() => {
+      alert('Camera access denied');
+    });
 }
 
-function drawBinary() {
-  ctx.fillStyle = css("--binary-fade");
-  ctx.fillRect(0,0,canvas.width,canvas.height);
+/*********************************
+ * TEXT TRANSLATION (DUMMY)
+ *********************************/
+function translateText() {
+  const enText = document.getElementById("enText");
+  const bnText = document.getElementById("bnText");
 
-  ctx.fillStyle = css("--binary-color");
-  ctx.font = fontSize + "px monospace";
-
-  drops.forEach((y,i)=>{
-    const t = Math.random()>0.5?"0":"1";
-    ctx.fillText(t, i*fontSize, y*fontSize);
-    if (y*fontSize > canvas.height && Math.random()>0.985) drops[i]=0;
-    drops[i]++;
-  });
-}
-
-setInterval(drawBinary, innerWidth < 768 ? 80 : 45);
-
-/* =========================
-   TYPING EFFECT
-========================= */
-const texts = [
-  "AI Engineer",
-  "Image Processing Enthusiast",
-  "Robotics Developer",
-  "Compiler Design Learner"
-];
-
-let t=0,c=0;
-const el = document.getElementById("typing");
-
-(function type(){
-  el.textContent = texts[t].slice(0,++c);
-  if(c===texts[t].length){
-    setTimeout(()=>{c=0;t=(t+1)%texts.length},1500);
+  if (!enText || !bnText) {
+    alert("Text box not found!");
+    return;
   }
-  setTimeout(type,90);
-})();
 
-/* =========================
-   LANGUAGE TOGGLE
-========================= */
-document.getElementById("langToggle").onclick=()=>{
-  document.querySelectorAll(".lang").forEach(e=>e.classList.toggle("hidden"));
-};
+  const en = enText.value.trim();
+  const bn = bnText.value.trim();
 
-/* =========================
-   FILTERS
-========================= */
-function filter(btnId, gridId){
-  const btns=document.querySelectorAll(`#${btnId} button`);
-  const cards=document.querySelectorAll(`#${gridId} .card`);
-  btns.forEach(b=>{
-    b.onclick=()=>{
-      btns.forEach(x=>x.classList.remove("active"));
-      b.classList.add("active");
-      const f=b.dataset.filter;
-      cards.forEach(c=>{
-        c.style.display=(f==="all"||c.dataset.category===f)?"block":"none";
-      });
+  let result = {};
+
+  // English ➜ Bangla
+  if (en && !bn) {
+    result = {
+      english: en,
+      bangla: "বাংলা অনুবাদ (ডেমো)"
     };
-  });
+    bnText.value = result.bangla;
+  }
+
+  // Bangla ➜ English
+  else if (bn && !en) {
+    result = {
+      english: "English Translation (Demo)",
+      bangla: bn
+    };
+    enText.value = result.english;
+  }
+
+  // Both filled or both empty
+  else {
+    alert("একবারে শুধু একটাতে লিখুন (English বা বাংলা)");
+    return;
+  }
+
+  saveText(result);
 }
 
-filter("skillFilters","skillGrid");
-filter("projectFilters","projectGrid");
+/*********************************
+ * SAVE TEXT DATA (LOCAL STORAGE)
+ *********************************/
+function saveText(data) {
+  if (!data.english && !data.bangla) return;
 
-/* =========================
-   THEME TOGGLE
-========================= */
-const themeBtn=document.createElement("button");
-themeBtn.textContent="🌙 / ☀️";
-themeBtn.style.position="fixed";
-themeBtn.style.top="15px";
-themeBtn.style.right="15px";
-themeBtn.style.zIndex="999";
-document.body.appendChild(themeBtn);
+  let logs = JSON.parse(localStorage.getItem("textLogs")) || [];
 
-themeBtn.onclick=()=>document.body.classList.toggle("light");
+  logs.push({
+    english: data.english || "",
+    bangla: data.bangla || "",
+    time: new Date().toLocaleString()
+  });
+
+  localStorage.setItem("textLogs", JSON.stringify(logs));
+
+  console.log("Saved Logs:", logs);
+  alert("Text saved successfully!");
+}
+
+/*********************************
+ * OPTIONAL: VIEW SAVED DATA
+ *********************************/
+function showSavedData() {
+  const logs = JSON.parse(localStorage.getItem("textLogs")) || [];
+  console.table(logs);
+}

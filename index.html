@@ -3,126 +3,80 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AI Sign Language Translator</title>
 
-  <title>Moontasir Mozumder | Portfolio</title>
+  <!-- Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
 
-  <meta name="description" content="Moontasir Mozumder | CSE Student | AI, Image Processing, Robotics & Compiler Design Portfolio">
-  <meta name="keywords" content="Moontasir Mozumder, AI, Robotics, Image Processing, Compiler Design">
-  <meta name="author" content="Moontasir Mozumder">
-
+  <!-- CSS -->
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
 
-<!-- Binary Rain Background -->
-<canvas id="binaryRain"></canvas>
+<div class="container">
+  <header>
+    <h1>AI Sign Language Translator</h1>
+    <p>Dual View • Voice & Animation</p>
+  </header>
 
-<header id="home" class="hero">
-  <div class="hero-content">
-    <div class="hero-text">
-      <h1>PORTFOLIO</h1>
+  <!-- VIDEO + ANIMATION -->
+  <div class="main-grid">
 
-      <p class="intro lang en">
-        Hi, I’m <strong>Moontasir Mozumder</strong><br>
-        <span id="typing"></span>
-      </p>
+    <!-- LIVE CAMERA -->
+    <div class="card">
+      <h3>🎥 Live Camera</h3>
+      <video id="camera" autoplay playsinline></video>
 
-      <p class="intro lang bn hidden">
-        আমি <strong>মুনতাসির মজুমদার</strong><br>
-        AI • ইমেজ প্রসেসিং • রোবোটিক্স • কম্পাইলার ডিজাইন
-      </p>
-
-      <button id="langToggle">বাংলা</button>
+      <!-- OUTPUT VOICE -->
+      <div class="voice-box">
+        <button class="voice-btn">
+          <i class="fa-solid fa-volume-high"></i> Output Voice
+        </button>
+        <div class="voice-wave"></div>
+      </div>
     </div>
 
-    <div class="hero-photo">
-      <img src="photo.png" alt="Moontasir Mozumder">
+    <!-- ANIMATION -->
+    <div class="card">
+      <h3>✋ Sign Animation</h3>
+      <div class="animation-box">
+        <div class="ecg"></div>
+        <span>Animated Sign Output</span>
+      </div>
+
+      <!-- INPUT VOICE -->
+      <div class="voice-box">
+        <button class="voice-btn">
+          <i class="fa-solid fa-microphone"></i> Input Voice
+        </button>
+        <div class="voice-wave"></div>
+      </div>
     </div>
+
   </div>
-</header>
 
-<nav class="navbar">
-  <a href="#about">About</a>
-  <a href="#skills">Skills</a>
-  <a href="#projects">Projects</a>
-  <a href="#contact">Contact</a>
-</nav>
-
-<section id="about" class="section">
-  <h2>About Me</h2>
+  <!-- TRANSLATED TEXT -->
+ <div class="main-grid">
   <div class="card">
-    <p class="lang en">
-      I am a Computer Science and Engineering student with strong interests in AI,
-      image processing, robotics, and compiler design.
-    </p>
-
-    <p class="lang bn hidden">
-      আমি একজন কম্পিউটার সায়েন্স অ্যান্ড ইঞ্জিনিয়ারিং শিক্ষার্থী।
-      AI, ইমেজ প্রসেসিং, রোবোটিক্স ও কম্পাইলার ডিজাইনে আগ্রহী।
-    </p>
-  </div>
-</section>
-
-<section id="skills" class="section">
-  <h2>Skills</h2>
-
-  <div class="filters" id="skillFilters">
-    <button class="active" data-filter="all">All</button>
-    <button data-filter="programming">Programming</button>
-    <button data-filter="ai">AI</button>
-    <button data-filter="hardware">Hardware</button>
+    <h3>🌐 English Text</h3>
+    <textarea id="enText" placeholder="Type English text..."></textarea>
   </div>
 
-  <div class="grid" id="skillGrid">
-    <div class="card" data-category="programming">C, C++, Python, JavaScript</div>
-    <div class="card" data-category="ai">Deep Learning, OpenCV</div>
-    <div class="card" data-category="hardware">Robotics</div>
+  <div class="card">
+    <h3>🌐 বাংলা Text</h3>
+    <textarea id="bnText" placeholder="বাংলা টেক্সট লিখুন..."></textarea>
   </div>
-</section>
-
-<section id="projects" class="section">
-  <h2>Projects</h2>
-
-  <div class="filters" id="projectFilters">
-    <button class="active" data-filter="all">All</button>
-    <button data-filter="ai">AI/ML</button>
-    <button data-filter="iot">IOT</button>
-    <button data-filter="robotics">Robotics</button>
-  </div>
-
-  <div class="grid" id="projectGrid">
-    <div class="card" data-category="ai">
-  <a 
-    href="file:///C:/Users/Moontasir/Documents/New%20folder/portfolio/sign-language-translator/index.html"
-    target="_blank"
-    class="project-link"
-  >
-    Sign-Language-Translator
-  </a>
 </div>
 
-    <div class="card" data-category="iot">smart kitchen Control and Security</div>
-    <div class="card" data-category="iot">Automation Ware-House Security</div>
-   <div class="card" data-category="iot">Smart Garden</div>
-    <div class="card" data-category="robotics">Line Follower Robot</div>
-    <div class="card" data-category="robotics">Bluetooth Cars Soccer</div>
-    <div class="card" data-category="robotics">WIFI/ESP (Remote) Car Soccer</div>
-    <div class="card" data-category="robotics">Obstacle Car</div>
-  </div>
-</section>
+<div class="card">
+  <button class="voice-btn" onclick="translateText()">
+    🔁 Translate & Save
+  </button>
+</div>
 
-<section id="contact" class="section">
-  <h2>Contact</h2>
-  <div class="card">
-    <p>Email: <a href="mailto:moontasirmozumder@gmail.com">moontasirmozumder@gmail.com</a></p>
-    <p>GitHub: <a href="https://github.com/moontasirmozumder">github.com/moontasirmozumder</a></p>
-    <p>LinkedIn: <a href="https://www.linkedin.com/in/moontasir-mozumder-7b4a87333/">LinkedIn</a></p>
-  </div>
-</section>
 
-<footer>
-  <p>© 2025 Moontasir Mozumder</p>
-</footer>
+  <footer>© 2025 AI/ML Portfolio Project</footer>
+</div>
 
 <script src="script.js"></script>
 </body>
