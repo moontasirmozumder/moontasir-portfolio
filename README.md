@@ -7,7 +7,7 @@ https://USERNAME.github.io/moontasir-portfolio
 
 ## Projects
 - Sign Language Translator (AI + CV)
-- Robotics Line Follower
+- Robotics
 
 ## Technologies
 - Python, OpenCV, Deep Learning
